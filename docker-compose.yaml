@@ -1,0 +1,59 @@
+version: "3"
+services:
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+#    networks:
+#      - my_network
+  kafka:
+    image: 'bitnami/kafka:latest'
+    ports:
+      - '29092:29092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://localhost:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:29092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    volumes:
+      - ./docker/kafka_volumes:/bitnami/kafka
+    depends_on:
+      - zookeeper
+#    networks:
+#      - my_network
+
+  transaction_receipt:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+#    image: transaction_receipt/api
+    ports:
+      - '8080:8080'
+    environment:
+      - PROFILE=dev
+    depends_on:
+      - transaction_receipt_d-base
+      - kafka
+#    networks:
+#      - my_network
+
+  transaction_receipt_d-base:
+    image: mysql:8.0
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=transaction_receipt_mysql
+      - MYSQL_USER=transaction_receipt
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ./docker/mysql_volumes:/var/lib/mysql
+#    networks:
+#      - my_network
+#
+#networks:
+#  my_network:
+#    driver: bridge

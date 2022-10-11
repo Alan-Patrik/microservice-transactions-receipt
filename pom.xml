@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.alanpatrik.bancosantander</groupId>
 	<artifactId>transactionreceipt</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>transactionreceipt</name>
 	<description>Projeto criado para ser um microserviço para enviar comprovante de transação</description>
 	<properties>
@@ -69,6 +69,11 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.6.7</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.19</version>
 		</dependency>
 	</dependencies>
 
